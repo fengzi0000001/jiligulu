@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浮窗日志系统测试页面</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+        
+        .test-section h3 {
+            color: #555;
+            margin-top: 0;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .instructions {
+            background: #e8f4fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .instructions h4 {
+            margin-top: 0;
+            color: #1976D2;
+        }
+        
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin: 5px 0;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 浮窗日志系统测试页面</h1>
+        
+        <div class="instructions">
+            <h4>📋 使用说明</h4>
+            <ol>
+                <li>确保已安装"Dreamina自动注册"Chrome扩展</li>
+                <li>按 <strong>Ctrl + Shift + L</strong> 显示浮窗日志</li>
+                <li>点击下方测试按钮查看日志效果</li>
+                <li>浮窗可以拖拽移动，点击右上角 × 关闭</li>
+            </ol>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔍 浮窗日志测试</h3>
+            <div id="logStatus" class="status info">等待测试...</div>
+            <button onclick="testBasicLogs()">测试基本日志</button>
+            <button onclick="testProgressLogs()">测试进度日志</button>
+            <button onclick="testErrorLogs()">测试错误日志</button>
+            <button onclick="testMixedLogs()">测试混合日志</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>⚙️ 扩展控制</h3>
+            <button onclick="startExtension()">启动扩展</button>
+            <button onclick="stopExtension()">停止扩展</button>
+            <button onclick="getStatus()">获取状态</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 测试结果</h3>
+            <div id="testResults" class="status info">暂无测试结果</div>
+            <button onclick="clearResults()">清除结果</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>💡 提示</h3>
+            <ul>
+                <li>浮窗日志系统会自动加载到页面中</li>
+                <li>所有日志都会显示时间戳和类型</li>
+                <li>可以导出日志文件用于分析</li>
+                <li>浮窗位置会自动保存</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let testResults = [];
+        
+        // 测试基本日志
+        function testBasicLogs() {
+            const statusDiv = document.getElementById('logStatus');
+            statusDiv.className = 'status info';
+            statusDiv.textContent = '正在测试基本日志...';
+            
+            if (window.floatingLog) {
+                window.floatingLog.addLog('这是一条信息日志', 'info');
+                window.floatingLog.addLog('这是一条成功日志', 'success');
+                window.floatingLog.addLog('这是一条警告日志', 'warning');
+                window.floatingLog.addLog('这是一条错误日志', 'error');
+                window.floatingLog.addLog('这是一条调试日志', 'debug');
+                
+                statusDiv.className = 'status success';
+                statusDiv.textContent = '✅ 基本日志测试完成';
+                addResult('基本日志测试', '成功', '已添加5条不同类型的日志');
+            } else {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = '❌ 浮窗日志系统未加载';
+                addResult('基本日志测试', '失败', '浮窗日志系统未加载');
+            }
+        }
+        
+        // 测试进度日志
+        function testProgressLogs() {
+            const statusDiv = document.getElementById('logStatus');
+            statusDiv.className = 'status info';
+            statusDiv.textContent = '正在测试进度日志...';
+            
+            if (window.floatingLog) {
+                for (let i = 1; i <= 5; i++) {
+                    setTimeout(() => {
+                        window.floatingLog.setProgress(i, 5, '测试步骤');
+                        if (i === 5) {
+                            statusDiv.className = 'status success';
+                            statusDiv.textContent = '✅ 进度日志测试完成';
+                            addResult('进度日志测试', '成功', '已显示5个进度步骤');
+                        }
+                    }, i * 500);
+                }
+            } else {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = '❌ 浮窗日志系统未加载';
+                addResult('进度日志测试', '失败', '浮窗日志系统未加载');
+            }
+        }
+        
+        // 测试错误日志
+        function testErrorLogs() {
+            const statusDiv = document.getElementById('logStatus');
+            statusDiv.className = 'status info';
+            statusDiv.textContent = '正在测试错误日志...';
+            
+            if (window.floatingLog) {
+                window.floatingLog.addLog('模拟网络连接错误', 'error', { 
+                    error: 'Connection timeout',
+                    code: 'NET_001',
+                    timestamp: new Date().toISOString()
+                });
+                
+                window.floatingLog.addLog('模拟验证码错误', 'error', {
+                    error: 'Invalid verification code',
+                    code: 'VER_001',
+                    attempts: 3
+                });
+                
+                statusDiv.className = 'status success';
+                statusDiv.textContent = '✅ 错误日志测试完成';
+                addResult('错误日志测试', '成功', '已添加2条错误日志');
+            } else {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = '❌ 浮窗日志系统未加载';
+                addResult('错误日志测试', '失败', '浮窗日志系统未加载');
+            }
+        }
+        
+        // 测试混合日志
+        function testMixedLogs() {
+            const statusDiv = document.getElementById('logStatus');
+            statusDiv.className = 'status info';
+            statusDiv.textContent = '正在测试混合日志...';
+            
+            if (window.floatingLog) {
+                const testData = {
+                    email: 'test@example.com',
+                    step: '混合测试',
+                    timestamp: new Date().toISOString()
+                };
+                
+                window.floatingLog.addLog('开始混合测试', 'info', testData);
+                window.floatingLog.setStatus('运行中', '测试各种日志类型');
+                window.floatingLog.addLog('测试完成', 'success');
+                
+                statusDiv.className = 'status success';
+                statusDiv.textContent = '✅ 混合日志测试完成';
+                addResult('混合日志测试', '成功', '已测试多种日志功能');
+            } else {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = '❌ 浮窗日志系统未加载';
+                addResult('混合日志测试', '失败', '浮窗日志系统未加载');
+            }
+        }
+        
+        // 启动扩展
+        function startExtension() {
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                chrome.runtime.sendMessage({ action: 'startMonitoring' }, (response) => {
+                    if (chrome.runtime.lastError) {
+                        alert('启动扩展失败: ' + chrome.runtime.lastError.message);
+                        addResult('扩展控制', '失败', chrome.runtime.lastError.message);
+                    } else {
+                        alert('扩展已启动');
+                        addResult('扩展控制', '成功', '扩展已启动');
+                    }
+                });
+            } else {
+                alert('扩展未安装或无法访问');
+                addResult('扩展控制', '失败', '扩展未安装');
+            }
+        }
+        
+        // 停止扩展
+        function stopExtension() {
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                chrome.runtime.sendMessage({ action: 'stopMonitoring' }, (response) => {
+                    if (chrome.runtime.lastError) {
+                        alert('停止扩展失败: ' + chrome.runtime.lastError.message);
+                        addResult('扩展控制', '失败', chrome.runtime.lastError.message);
+                    } else {
+                        alert('扩展已停止');
+                        addResult('扩展控制', '成功', '扩展已停止');
+                    }
+                });
+            } else {
+                alert('扩展未安装或无法访问');
+                addResult('扩展控制', '失败', '扩展未安装');
+            }
+        }
+        
+        // 获取状态
+        function getStatus() {
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                chrome.runtime.sendMessage({ action: 'getDetailedStatus' }, (response) => {
+                    if (chrome.runtime.lastError) {
+                        alert('获取状态失败: ' + chrome.runtime.lastError.message);
+                        addResult('状态查询', '失败', chrome.runtime.lastError.message);
+                    } else {
+                        alert('扩展状态: ' + JSON.stringify(response, null, 2));
+                        addResult('状态查询', '成功', '状态已获取');
+                    }
+                });
+            } else {
+                alert('扩展未安装或无法访问');
+                addResult('状态查询', '失败', '扩展未安装');
+            }
+        }
+        
+        // 添加测试结果
+        function addResult(test, status, message) {
+            const timestamp = new Date().toLocaleTimeString();
+            testResults.push({
+                timestamp,
+                test,
+                status,
+                message
+            });
+            updateResultsDisplay();
+        }
+        
+        // 更新结果显示
+        function updateResultsDisplay() {
+            const resultsDiv = document.getElementById('testResults');
+            if (testResults.length === 0) {
+                resultsDiv.textContent = '暂无测试结果';
+                resultsDiv.className = 'status info';
+                return;
+            }
+            
+            let html = '<div style="max-height: 200px; overflow-y: auto;">';
+            testResults.forEach(result => {
+                const statusIcon = result.status === '成功' ? '✅' : '❌';
+                html += `<div style="margin: 5px 0; padding: 5px; background: ${result.status === '成功' ? '#d4edda' : '#f8d7da'}; border-radius: 3px;">`;
+                html += `<strong>${result.timestamp}</strong> - ${result.test}: ${statusIcon} ${result.message}`;
+                html += '</div>';
+            });
+            html += '</div>';
+            
+            resultsDiv.innerHTML = html;
+            resultsDiv.className = 'status info';
+        }
+        
+        // 清除结果
+        function clearResults() {
+            testResults = [];
+            updateResultsDisplay();
+        }
+        
+        // 页面加载完成后检查浮窗日志系统
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (window.floatingLog) {
+                    document.getElementById('logStatus').className = 'status success';
+                    document.getElementById('logStatus').textContent = '✅ 浮窗日志系统已加载';
+                    addResult('系统检查', '成功', '浮窗日志系统已加载');
+                } else {
+                    document.getElementById('logStatus').className = 'status error';
+                    document.getElementById('logStatus').textContent = '❌ 浮窗日志系统未加载';
+                    addResult('系统检查', '失败', '浮窗日志系统未加载');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>扩展功能测试页面</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .test-section h3 {
+            color: #2196F3;
+            margin-top: 0;
+        }
+        .test-button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        .test-button:hover {
+            background: #1976D2;
+        }
+        .test-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            border-radius: 0 5px 5px 0;
+        }
+        .note {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Dreamina自动注册扩展测试页面</h1>
+        
+        <div class="note">
+            <strong>💡 使用说明：</strong>
+            <br>1. 确保扩展已安装并启用
+            <br>2. 按F12打开控制台查看详细日志
+            <br>3. 点击测试按钮验证各项功能
+            <br>4. 如果测试失败，请参考相关文档
+        </div>
+
+        <div class="test-section">
+            <h3>🔍 基础功能测试</h3>
+            <button class="test-button" onclick="testExtensionStatus()">测试扩展状态</button>
+            <button class="test-button" onclick="testMessagePassing()">测试消息传递</button>
+            <button class="test-button" onclick="testStorage()">测试存储功能</button>
+            <div id="basic-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🌐 网络连接测试</h3>
+            <button class="test-button" onclick="testNetworkConnection()">测试网络连接</button>
+            <button class="test-button" onclick="testSpecificUrl()">测试登录URL</button>
+            <button class="test-button" onclick="testManualNetwork()">手动网络测试</button>
+            <div id="network-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📧 邮箱系统测试</h3>
+            <button class="test-button" onclick="testEmailSystem()">测试邮箱系统</button>
+            <button class="test-button" onclick="testWebmail()">测试Webmail</button>
+            <div id="email-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🤖 Dreamina测试</h3>
+            <button class="test-button" onclick="testDreamina()">测试Dreamina连接</button>
+            <button class="test-button" onclick="testRegistration()">测试注册流程</button>
+            <div id="dreamina-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 诊断工具</h3>
+            <button class="test-button" onclick="runDiagnostics()">运行完整诊断</button>
+            <button class="test-button" onclick="clearResults()">清除所有结果</button>
+            <div id="diagnostic-result" class="result"></div>
+        </div>
+
+        <div class="step">
+            <strong>📋 测试步骤：</strong>
+            <br>1. 先运行"基础功能测试"，确保扩展正常工作
+            <br>2. 再运行"网络连接测试"，检查网络状态
+            <br>3. 然后测试"邮箱系统"，验证邮箱管理功能
+            <br>4. 最后测试"Dreamina"，确认注册流程
+            <br>5. 如有问题，使用"诊断工具"进行深入分析
+        </div>
+
+        <div class="note">
+            <strong>📚 相关文档：</strong>
+            <br>• <a href="状态码0问题诊断指南.md" target="_blank">状态码0问题诊断指南</a>
+            <br>• <a href="CORS问题说明.md" target="_blank">CORS问题说明</a>
+            <br>• <a href="快速测试指南.md" target="_blank">快速测试指南</a>
+            <br>• <a href="邮箱管理后台登录流程说明.md" target="_blank">邮箱管理后台登录流程说明</a>
+            <br>• <a href="Dreamina注册流程说明.md" target="_blank">Dreamina注册流程说明</a>
+        </div>
+    </div>
+
+    <script>
+        // 显示结果
+        function showResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.className = `result ${type}`;
+            element.textContent = `${new Date().toLocaleTimeString()}\n${message}`;
+        }
+
+        // 测试扩展状态
+        async function testExtensionStatus() {
+            try {
+                showResult('basic-result', '正在测试扩展状态...', 'info');
+                
+                if (typeof chrome === 'undefined' || !chrome.runtime) {
+                    showResult('basic-result', '❌ Chrome扩展API不可用\n请确保在Chrome浏览器中运行此页面', 'error');
+                    return;
+                }
+
+                const response = await new Promise((resolve, reject) => {
+                    chrome.runtime.sendMessage({ action: 'getStatus' }, (response) => {
+                        if (chrome.runtime.lastError) {
+                            reject(chrome.runtime.lastError);
+                        } else {
+                            resolve(response);
+                        }
+                    });
+                });
+
+                showResult('basic-result', `✅ 扩展状态测试成功\n${JSON.stringify(response, null, 2)}`, 'success');
+            } catch (error) {
+                showResult('basic-result', `❌ 扩展状态测试失败\n${error.message}`, 'error');
+            }
+        }
+
+        // 测试消息传递
+        async function testMessagePassing() {
+            try {
+                showResult('basic-result', '正在测试消息传递...', 'info');
+                
+                const response = await new Promise((resolve, reject) => {
+                    chrome.runtime.sendMessage({ action: 'getDetailedStatus' }, (response) => {
+                        if (chrome.runtime.lastError) {
+                            reject(chrome.runtime.lastError);
+                        } else {
+                            resolve(response);
+                        }
+                    });
+                });
+
+                showResult('basic-result', `✅ 消息传递测试成功\n${JSON.stringify(response, null, 2)}`, 'success');
+            } catch (error) {
+                showResult('basic-result', `❌ 消息传递测试失败\n${error.message}`, 'error');
+            }
+        }
+
+        // 测试存储功能
+        async function testStorage() {
+            try {
+                showResult('basic-result', '正在测试存储功能...', 'info');
+                
+                await chrome.storage.local.set({ testKey: 'testValue' });
+                const result = await chrome.storage.local.get(['testKey']);
+                await chrome.storage.local.remove(['testKey']);
+
+                showResult('basic-result', `✅ 存储功能测试成功\n${JSON.stringify(result, null, 2)}`, 'success');
+            } catch (error) {
+                showResult('basic-result', `❌ 存储功能测试失败\n${error.message}`, 'error');
+            }
+        }
+
+        // 测试网络连接
+        async function testNetworkConnection() {
+            try {
+                showResult('network-result', '正在测试网络连接...', 'info');
+                
+                const response = await new Promise((resolve, reject) => {
+                    chrome.runtime.sendMessage({ action: 'manualNetworkTest' }, (response) => {
+                        if (chrome.runtime.lastError) {
+                            reject(chrome.runtime.lastError);
+                        } else {
+                            resolve(response);
+                        }
+                    });
+                });
+
+                showResult('network-result', `✅ 网络连接测试成功\n${JSON.stringify(response, null, 2)}`, 'success');
+            } catch (error) {
+                showResult('network-result', `❌ 网络连接测试失败\n${error.message}`, 'error');
+            }
+        }
+
+        // 测试特定URL
+        async function testSpecificUrl() {
+            try {
+                showResult('network-result', '正在测试登录URL...', 'info');
+                
+                const response = await new Promise((resolve, reject) => {
+                    chrome.runtime.sendMessage({ 
+                        action: 'testSpecificUrl', 
+                        url: 'http://mail.turtur.us:8010/Index/login'
+                    }, (response) => {
+                        if (chrome.runtime.lastError) {
+                            reject(chrome.runtime.lastError);
+                        } else {
+                            resolve(response);
+                        }
+                    });
+                });
+
+                showResult('network-result', `✅ 登录URL测试成功\n${JSON.stringify(response, null, 2)}`, 'success');
+            } catch (error) {
+                showResult('network-result', `❌ 登录URL测试失败\n${error.message}`, 'error');
+            }
+        }
+
+        // 手动网络测试
+        async function testManualNetwork() {
+            try {
+                showResult('network-result', '正在执行手动网络测试...', 'info');
+                
+                const testUrls = [
+                    'http://mail.turtur.us:8010/Index/login',
+                    'http://mail.turtur.us:8010/',
+                    'http://mail.turtur.us:8000/'
+                ];
+
+                const results = {};
+                
+                for (const url of testUrls) {
+                    try {
+                        const startTime = Date.now();
+                        const response = await fetch(url, { 
+                            method: 'GET',
+                            mode: 'no-cors'
+                        });
+                        const endTime = Date.now();
+                        
+                        results[url] = {
+                            success: true,
+                            responseTime: endTime - startTime,
+                            status: response.status || 'no-cors',
+                            type: response.type
+                        };
+                    } catch (error) {
+                        results[url] = {
+                            success: false,
+                            error: error.message
+                        };
+                    }
+                }
+
+                showResult('network-result', `✅ 手动网络测试完成\n${JSON.stringify(results, null, 2)}`, 'success');
+            } catch (error) {
+                showResult('network-result', `❌ 手动网络测试失败\n${error.message}`, 'error');
+            }
+        }
+
+        // 测试邮箱系统
+        async function testEmailSystem() {
+            try {
+                showResult('email-result', '正在测试邮箱系统...', 'info');
+                
+                // 测试基本连接
+                const response = await fetch('http://mail.turtur.us:8010/Index/login', {
+                    method: 'GET',
+                    mode: 'no-cors'
+                });
+
+                showResult('email-result', `✅ 邮箱系统测试成功\n状态: ${response.status || 'no-cors'}\n类型: ${response.type}`, 'success');
+            } catch (error) {
+                showResult('email-result', `❌ 邮箱系统测试失败\n${error.message}`, 'error');
+            }
+        }
+
+        // 测试Webmail
+        async function testWebmail() {
+            try {
+                showResult('email-result', '正在测试Webmail...', 'info');
+                
+                const response = await fetch('http://mail.turtur.us:8000/', {
+                    method: 'GET',
+                    mode: 'no-cors'
+                });
+
+                showResult('email-result', `✅ Webmail测试成功\n状态: ${response.status || 'no-cors'}\n类型: ${response.type}`, 'success');
+            } catch (error) {
+                showResult('email-result', `❌ Webmail测试失败\n${error.message}`, 'error');
+            }
+        }
+
+        // 测试Dreamina
+        async function testDreamina() {
+            try {
+                showResult('dreamina-result', '正在测试Dreamina连接...', 'info');
+                
+                const response = await fetch('https://dreamina.capcut.com/ai-tool/login', {
+                    method: 'GET'
+                });
+
+                showResult('dreamina-result', `✅ Dreamina连接测试成功\n状态: ${response.status}\n状态文本: ${response.statusText}`, 'success');
+            } catch (error) {
+                showResult('dreamina-result', `❌ Dreamina连接测试失败\n${error.message}`, 'error');
+            }
+        }
+
+        // 测试注册流程
+        async function testRegistration() {
+            try {
+                showResult('dreamina-result', '正在测试注册流程...', 'info');
+                
+                // 这里可以添加更复杂的注册流程测试
+                showResult('dreamina-result', `✅ 注册流程测试完成\n注意：这是基础测试，完整测试需要在Dreamina页面上进行`, 'success');
+            } catch (error) {
+                showResult('dreamina-result', `❌ 注册流程测试失败\n${error.message}`, 'error');
+            }
+        }
+
+        // 运行完整诊断
+        async function runDiagnostics() {
+            try {
+                showResult('diagnostic-result', '正在运行完整诊断...', 'info');
+                
+                const diagnostics = {
+                    timestamp: new Date().toISOString(),
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform,
+                    language: navigator.language,
+                    cookieEnabled: navigator.cookieEnabled,
+                    onLine: navigator.onLine,
+                    chromeExtension: typeof chrome !== 'undefined' && !!chrome.runtime
+                };
+
+                // 测试扩展功能
+                try {
+                    const statusResponse = await new Promise((resolve, reject) => {
+                        chrome.runtime.sendMessage({ action: 'getStatus' }, (response) => {
+                            if (chrome.runtime.lastError) {
+                                reject(chrome.runtime.lastError);
+                            } else {
+                                resolve(response);
+                            }
+                        });
+                    });
+                    diagnostics.extensionStatus = statusResponse;
+                } catch (error) {
+                    diagnostics.extensionStatus = { error: error.message };
+                }
+
+                showResult('diagnostic-result', `✅ 完整诊断完成\n${JSON.stringify(diagnostics, null, 2)}`, 'success');
+            } catch (error) {
+                showResult('diagnostic-result', `❌ 完整诊断失败\n${error.message}`, 'error');
+            }
+        }
+
+        // 清除所有结果
+        function clearResults() {
+            const resultElements = ['basic-result', 'network-result', 'email-result', 'dreamina-result', 'diagnostic-result'];
+            resultElements.forEach(id => {
+                const element = document.getElementById(id);
+                element.textContent = '';
+                element.className = 'result';
+            });
+        }
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('扩展测试页面已加载');
+            
+            // 检查扩展是否可用
+            if (typeof chrome === 'undefined' || !chrome.runtime) {
+                showResult('basic-result', '⚠️ Chrome扩展API不可用\n请确保在Chrome浏览器中运行此页面', 'warning');
+            } else {
+                showResult('basic-result', '✅ Chrome扩展API可用\n可以开始测试', 'success');
+            }
+        });
+    </script>
+</body>
+</html>

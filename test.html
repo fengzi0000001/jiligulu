@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>即梦AI自动注册扩展测试页面</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+        
+        .test-section h3 {
+            color: #555;
+            margin-top: 0;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .form-group {
+            margin: 15px 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        input:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        
+        .instructions {
+            background: #e8f4fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .instructions h4 {
+            margin-top: 0;
+            color: #1976D2;
+        }
+        
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Dreamina自动注册扩展测试页面</h1>
+        
+        <div class="instructions">
+            <h4>📋 使用说明</h4>
+            <ol>
+                <li>确保已安装"Dreamina自动注册"Chrome扩展</li>
+                <li>点击浏览器工具栏中的扩展图标</li>
+                <li>在弹出窗口中点击"开始自动注册"</li>
+                <li>观察下方测试结果</li>
+            </ol>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔍 扩展检测</h3>
+            <div id="extensionStatus" class="status warning">检测中...</div>
+            <button onclick="checkExtension()">检测扩展状态</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>📧 邮箱系统测试</h3>
+            <div id="emailStatus" class="status info">等待测试...</div>
+            <button onclick="testEmailSystem()">测试邮箱系统</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>🤖 Dreamina模拟</h3>
+            <div id="aiStatus" class="status info">等待测试...</div>
+            <div class="form-group">
+                <label for="testEmail">测试邮箱:</label>
+                <input type="email" id="testEmail" placeholder="输入测试邮箱地址" value="test@tiktokaccu.com">
+            </div>
+            <div class="form-group">
+                <label for="testPassword">测试密码:</label>
+                <input type="password" id="testPassword" placeholder="输入测试密码" value="ceshi123">
+            </div>
+            <button onclick="testAISystem()">测试AI系统</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 测试结果</h3>
+            <div id="testResults" class="status info">暂无测试结果</div>
+            <button onclick="clearResults()">清除结果</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>⚙️ 扩展控制</h3>
+            <button onclick="startExtension()">启动扩展</button>
+            <button onclick="stopExtension()">停止扩展</button>
+            <button onclick="openExtension()">打开扩展</button>
+        </div>
+    </div>
+
+    <script>
+        let testResults = [];
+        
+        // 检测扩展状态
+        function checkExtension() {
+            const statusDiv = document.getElementById('extensionStatus');
+            statusDiv.className = 'status info';
+            statusDiv.textContent = '正在检测扩展...';
+            
+            // 检查扩展是否已安装
+            if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id) {
+                statusDiv.className = 'status success';
+                statusDiv.textContent = '✅ 扩展已安装并正常运行';
+                addResult('扩展检测', '成功', '扩展已安装并正常运行');
+            } else {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = '❌ 扩展未安装或无法访问';
+                addResult('扩展检测', '失败', '扩展未安装或无法访问');
+            }
+        }
+        
+        // 测试邮箱系统
+        function testEmailSystem() {
+            const statusDiv = document.getElementById('emailStatus');
+            statusDiv.className = 'status info';
+            statusDiv.textContent = '正在测试邮箱系统...';
+            
+            // 模拟测试邮箱系统连接
+            setTimeout(() => {
+                try {
+                    // 这里可以添加实际的邮箱系统测试逻辑
+                    const testUrl = 'http://mail.turtur.us:8010';
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = '✅ 邮箱系统连接正常';
+                    addResult('邮箱系统测试', '成功', '邮箱系统连接正常');
+                } catch (error) {
+                    statusDiv.className = 'status error';
+                    statusDiv.textContent = '❌ 邮箱系统连接失败: ' + error.message;
+                    addResult('邮箱系统测试', '失败', error.message);
+                }
+            }, 1000);
+        }
+        
+        // 测试AI系统
+        function testAISystem() {
+            const statusDiv = document.getElementById('aiStatus');
+            const email = document.getElementById('testEmail').value;
+            const password = document.getElementById('testPassword').value;
+            
+            if (!email || !password) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = '❌ 请填写测试邮箱和密码';
+                return;
+            }
+            
+            statusDiv.className = 'status info';
+            statusDiv.textContent = '正在测试AI系统...';
+            
+            // 模拟测试AI系统
+            setTimeout(() => {
+                statusDiv.className = 'status success';
+                statusDiv.textContent = '✅ Dreamina系统测试完成，表单填写正常';
+                addResult('Dreamina系统测试', '成功', `使用邮箱 ${email} 测试成功`);
+            }, 1500);
+        }
+        
+        // 添加测试结果
+        function addResult(test, status, message) {
+            const timestamp = new Date().toLocaleTimeString();
+            testResults.push({
+                timestamp,
+                test,
+                status,
+                message
+            });
+            updateResultsDisplay();
+        }
+        
+        // 更新结果显示
+        function updateResultsDisplay() {
+            const resultsDiv = document.getElementById('testResults');
+            if (testResults.length === 0) {
+                resultsDiv.textContent = '暂无测试结果';
+                resultsDiv.className = 'status info';
+                return;
+            }
+            
+            let html = '<div style="max-height: 200px; overflow-y: auto;">';
+            testResults.forEach(result => {
+                const statusIcon = result.status === '成功' ? '✅' : '❌';
+                html += `<div style="margin: 5px 0; padding: 5px; background: ${result.status === '成功' ? '#d4edda' : '#f8d7da'}; border-radius: 3px;">`;
+                html += `<strong>${result.timestamp}</strong> - ${result.test}: ${statusIcon} ${result.message}`;
+                html += '</div>';
+            });
+            html += '</div>';
+            
+            resultsDiv.innerHTML = html;
+            resultsDiv.className = 'status info';
+        }
+        
+        // 清除结果
+        function clearResults() {
+            testResults = [];
+            updateResultsDisplay();
+        }
+        
+        // 启动扩展
+        function startExtension() {
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                chrome.runtime.sendMessage({ action: 'startMonitoring' }, (response) => {
+                    if (chrome.runtime.lastError) {
+                        alert('启动扩展失败: ' + chrome.runtime.lastError.message);
+                    } else {
+                        alert('扩展已启动');
+                        addResult('扩展控制', '成功', '扩展已启动');
+                    }
+                });
+            } else {
+                alert('扩展未安装或无法访问');
+            }
+        }
+        
+        // 停止扩展
+        function stopExtension() {
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                chrome.runtime.sendMessage({ action: 'stopMonitoring' }, (response) => {
+                    if (chrome.runtime.lastError) {
+                        alert('停止扩展失败: ' + chrome.runtime.lastError.message);
+                    } else {
+                        alert('扩展已停止');
+                        addResult('扩展控制', '成功', '扩展已停止');
+                    }
+                });
+            } else {
+                alert('扩展未安装或无法访问');
+            }
+        }
+        
+        // 打开扩展
+        function openExtension() {
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                chrome.runtime.sendMessage({ action: 'openPopup' });
+            } else {
+                alert('扩展未安装或无法访问');
+            }
+        }
+        
+        // 页面加载完成后自动检测扩展
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(checkExtension, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Dreamina自动注册",
+  "version": "1.0",
+  "description": "使用企业邮箱自动注册Dreamina账号并在积分用完后切换新号",
+  "permissions": ["storage", "activeTab", "scripting", "tabs"],
+  "host_permissions": [
+    "http://mail.turtur.us:8010/*",
+    "http://mail.turtur.us:8000/*",
+    "http://www.bingtop.com/*"
+  ],
+  "background": {
+    "service_worker": "background-simple.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.dreamina.capcut.com/*", "*://dreamina.capcut.com/*"],
+      "js": ["floating-log.js", "content.js"]
+    }
+  ]
+}
